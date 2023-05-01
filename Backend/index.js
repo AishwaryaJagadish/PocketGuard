@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
+const router = require('./routes/expense')
 const app = express()
 dotenv.config()
 
@@ -18,7 +19,7 @@ const connectdb = async () => {
 
 app.use(express.json())
 app.use (cookieParser());
-// app.use("/api/", router)
+app.use(router)
 
 
 app.listen(port, () => {
