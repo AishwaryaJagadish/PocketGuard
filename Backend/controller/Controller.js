@@ -3,8 +3,9 @@ const Expense = require('../models/Expense');
 exports.addExpense = async(req,res) => {
     try{
         const expense = new Expense(req.body);
-        await expense.save();
+        const result = await expense.save();
         res.status(200).json({
+            body: result, 
             message: 'Expense added successfully!'
         });
     }
@@ -17,7 +18,7 @@ exports.addExpense = async(req,res) => {
 
 exports.getExpenses = async(req,res) => {
     try{
-        const expenses = await Expense.find();
+        const expenses = await Expense.find().sort({createdAt: -1});
         res.status(200).json(expenses);
     }
     catch(error){
@@ -48,6 +49,7 @@ exports.deleteExpense = async(req,res) => {
     try{
         await Expense.findByIdAndDelete(req.params.id);
         res.status(200).json({
+            _id: req.params.id,
             message: 'Expense deleted successfully!'
         });
     }

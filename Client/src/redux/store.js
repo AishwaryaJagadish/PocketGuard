@@ -1,17 +1,14 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { configureStore } from '@reduxjs/toolkit';
+import { expensesReducer } from './reducer/expensesReducer';
+import  userReducer from './userSlice';
 import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { expensesReducer } from "./reducer/expensesReducer";
 
-const reducer = combineReducers({
-    expenses: expensesReducer
-})
-
-const middleware = [thunk];
-
-const store = createStore(
-    reducer,
-    composeWithDevTools(applyMiddleware(...middleware))
-)
+const store = configureStore({
+  reducer: {
+    expenses: expensesReducer,
+    user: userReducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+});
 
 export default store;

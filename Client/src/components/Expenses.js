@@ -8,7 +8,7 @@ function Expenses() {
 
     const dispatch = useDispatch();
 
-    const expenses = useSelector(state => state.expenses)
+    const expenses = useSelector(state => state.expenses.expenses)
 
     const onDeleteExpense = (expense) => {
         console.log("Delete")
@@ -17,7 +17,7 @@ function Expenses() {
 
     useEffect(() => {
         dispatch(getAllExpenses())
-    }, [expenses])
+    }, [])
 
     return (
         <div className="mx-auto max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
