@@ -12,10 +12,15 @@ exports.register = async (req, res, next) => {
             username: req.body.username,
             email: req.body.email,
             password: hash,
+            budget: req.body.budget
         })
 
-        await newUser.save();
-        res.status(200).send("User has been created ")
+        const user = await newUser.save();
+        const token = jwt.sign({ id: user._id, email: user.email}, process.env.JWT);
+
+        res.cookie("access_token", token, {
+            httpOnly: true,
+        }).status(200).json({ user: user._doc, token: token })
     } catch (err) {
 
     }
@@ -23,18 +28,35 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const user = await User.findOne({ username: req.body.username })
+        const user = await User.findOne({ email: req.body.email })
         if (!user) return next(createError(404, "User not Found!"))
 
         const isPassword = await bcrypt.compare(req.body.password, user.password)
-        if (!isPassword) return next(createError(404, "Wrong password the username"))
+        if (!isPassword) return next(createError(404, "Wrong password or username"))
 
-        const token = jwt.sign({ id: user._id}, process.env.JWT);
+        const token = jwt.sign({ id: user._id, email: user.email}, process.env.JWT);
 
         res.cookie("access_token", token, {
             httpOnly: true,
         }).status(200).json({ user: user._doc, token: token })
     } catch (err) {
 
+    }
+}
+
+exports.updateBudget = async(req,res) => {
+    try{
+        const user = jwt.decode(req.headers.authorization.split(' ')[1]);
+        const expense = await User.findById(user.id);
+        expense.budget = req.body.budget;
+        await expense.save();
+        res.status(200).json({
+            message: 'User updated successfully!'
+        });
+    }
+    catch(error){
+        res.status(500).json({
+            message: 'Unable to update expense!'
+        });
     }
 }

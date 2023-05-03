@@ -1,8 +1,17 @@
 const Expense = require('../models/Expense');
+const jwt = require('jsonwebtoken');
 
 exports.addExpense = async(req,res) => {
     try{
-        const expense = new Expense(req.body);
+        console.log(req.headers.authorization.split(' ')[1]);
+        // const token = req.headers.authorization.split(' ')[1];
+        const user = jwt.decode(req.headers.authorization.split(' ')[1]);
+        console.log(user);
+        const expense = new Expense({
+            email: user.email,
+            name: req.body.name,
+            amount: req.body.amount
+        });
         const result = await expense.save();
         res.status(200).json({
             body: result, 
@@ -11,19 +20,22 @@ exports.addExpense = async(req,res) => {
     }
     catch(error){
         res.status(500).json({
-            message: 'Unable to add expense!'
+            message: error.message
         });
     }
 };
 
 exports.getExpenses = async(req,res) => {
     try{
-        const expenses = await Expense.find().sort({createdAt: -1});
+        console.log(req.headers)
+        const user = jwt.decode(req.headers.authorization.split(' ')[1]);
+        console.log(user)
+        const expenses = await Expense.find({email: user.email}).sort({createdAt: -1});
         res.status(200).json(expenses);
     }
     catch(error){
         res.status(500).json({
-            message: 'Unable to fetch expenses!'
+            message: error.message
         });
     }
 };
@@ -47,9 +59,10 @@ exports.updateExpense = async(req,res) => {
 
 exports.deleteExpense = async(req,res) => {
     try{
-        await Expense.findByIdAndDelete(req.params.id);
+        const expense = await Expense.findByIdAndDelete(req.params.id);
         res.status(200).json({
             _id: req.params.id,
+            amount: expense.amount,
             message: 'Expense deleted successfully!'
         });
     }
@@ -59,3 +72,4 @@ exports.deleteExpense = async(req,res) => {
         });
     }
 };
+

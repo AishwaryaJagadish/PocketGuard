@@ -4,20 +4,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteExpense, getAllExpenses } from '../redux/actions';
 
 
-function Expenses() {
+function Expenses(props) {
 
     const dispatch = useDispatch();
 
-    const expenses = useSelector(state => state.expenses.expenses)
+    // const expenses = useSelector(state => state.expenses.expenses)
+
+    const { expenses } = props;
 
     const onDeleteExpense = (expense) => {
         console.log("Delete")
         dispatch(deleteExpense(expense._id))
     }
 
-    useEffect(() => {
-        dispatch(getAllExpenses())
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getAllExpenses())
+    // }, [])
 
     return (
         <div className="mx-auto max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
