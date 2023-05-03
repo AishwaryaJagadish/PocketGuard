@@ -1,17 +1,40 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment, useState, useRef, useEffect } from 'react'
 import {
     CurrencyRupeeIcon
 } from '@heroicons/react/20/solid'
 import { Dialog, Transition } from '@headlessui/react'
+import Navbar from './Navbar'
+import Expenses from './Expenses'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllExpenses, updateBudget } from '../redux/actions'
 
 
 function Budget() {
-    const [budget, setbudget] = useState(2000)
     const [open, setOpen] = useState(false)
     const cancelButtonRef = useRef(null)
-    const [expense, setExpense] = useState(600)
+    // const [expense, setExpense] = useState(0)
+    
+
+    const dispatch = useDispatch();
+
+    const user = useSelector(state => state.expenses.user)
+    const expenses = useSelector(state => state.expenses.expenses)
+    const expense = useSelector(state => state.expenses.totalExpenses)
+
+    const [budget, setBudget] = useState(user.budget)
+
+    const onUpdateBudget = (e) => {
+        setOpen(false)
+        dispatch(updateBudget(budget))
+    }
+
+    useEffect(() => {
+        dispatch(getAllExpenses())
+    }, [])
+    
     return (
         <>
+            <Navbar />
             <div className="mx-auto max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
                 <div className=" flex items-center justify-between grid-cols-2">
                     <div className="w-1/3 flex flex-col justify-between bg-white rounded-lg border border-gray-400 mb-6 py-5 px-4">
@@ -88,6 +111,7 @@ function Budget() {
                                                         id="price"
                                                         className="block w-full rounded-md py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                         placeholder="Enter Your Budget"
+                                                        onChange={(e) => setBudget(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -97,7 +121,7 @@ function Budget() {
                                         <button
                                             type="button"
                                             className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                                            onClick={() => setOpen(false)}
+                                            onClick={(e) => onUpdateBudget(e)}
                                         >
                                             Save
                                         </button>
@@ -116,6 +140,10 @@ function Budget() {
                     </div>
                 </Dialog>
             </Transition.Root>
+            {
+                expenses.length > 0 ? (
+                    <Expenses expenses={expenses}/>) : null
+            }
         </>
 
     )

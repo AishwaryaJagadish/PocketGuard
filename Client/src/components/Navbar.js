@@ -4,8 +4,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {
   CurrencyRupeeIcon
 } from '@heroicons/react/20/solid'
-import {useDispatch} from 'react-redux'
-import { addNewExpense } from '../redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { addNewExpense, logout } from '../redux/actions'
+import { Link } from 'react-router-dom'
 
 
 function classNames(...classes) {
@@ -17,15 +18,17 @@ export default function Navbar() {
   const cancelButtonRef = useRef(null)
   const [expenseAmount, setExpenseAmount] = useState(0)
   const [expenseName, setExpenseName] = useState("")
+
+  const user = useSelector(state => state.expenses.user)
   const dispatch = useDispatch();
 
   const onAddExpense = (e) => {
     setOpen(false)
     const newExpense = {
-      "name" : expenseName,
-      "amount" : expenseAmount
+      "name": expenseName,
+      "amount": expenseAmount
     }
-    dispatch(addNewExpense(newExpense)) 
+    dispatch(addNewExpense(newExpense))
     console.log(newExpense)
   }
 
@@ -79,9 +82,12 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div>
-                  <button className="bg-500 hover:bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-medium">
-                    Sign In
-                  </button>
+                  {user ? <button className="hover:bg-red-600 text-white rounded-md px-3 py-2 text-sm font-medium" onClick={()=> dispatch(logout())}>
+                      Logout
+                    </button> : (<Link to="/login" className="bg-500 hover:bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-medium">
+                      Sign In
+                    </Link>)
+                  }
                 </div>
               </div>
             </div>
