@@ -1,6 +1,5 @@
 import axios from "axios";
-import { ADDNEW_EXPENSE, DELETE_EXPENSE, GETALL_EXPENSE, LOGIN_SUCCESS, LOGIN_START, LOGIN_FAILURE, LOGOUT_USER, UPDATE_BUDGET  } from "./type";
-import { loginFailure, loginStart, loginSuccess } from "../userSlice";
+import { ADDNEW_EXPENSE, DELETE_EXPENSE, GETALL_EXPENSE, LOGIN_SUCCESS, LOGIN_START, LOGIN_FAILURE, LOGOUT_USER, UPDATE_BUDGET, UPDATE_EXPENSE  } from "./type";
 
 const API_URL = "http://localhost:8000";
 
@@ -27,6 +26,15 @@ export const deleteExpense = (id) => async (dispatch) => {
     try {
         const res = await axios.delete(`${API_URL}/deleteExpense/${id}`);
         dispatch({ type: DELETE_EXPENSE, payload: res.data });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updateExpense = (id, data) => async (dispatch) => {
+    try {
+        const res = await axios.put(`${API_URL}/updateExpense/${id}`, data);
+        dispatch({ type: UPDATE_EXPENSE, payload: res.data });
     } catch (error) {
         console.log(error);
     }

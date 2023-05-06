@@ -4,15 +4,14 @@ const initialState = {
     expenses: [],
     user: null,
     isFetching: false,
-    error: false, 
-    accesstoken : null, 
+    error: false,
+    accesstoken: null,
     totalExpenses: 0
 }
 
 export const expensesReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADDNEW_EXPENSE:
-            // return [action.payload, ...state]
             return {
                 ...state,
                 expenses: [action.payload.body, ...state.expenses],
@@ -21,15 +20,20 @@ export const expensesReducer = (state = initialState, action) => {
         case actionTypes.GETALL_EXPENSE:
             return {
                 ...state,
-                expenses: action.payload, 
+                expenses: action.payload,
                 totalExpenses: action.payload.reduce((total, expense) => total + expense.amount, 0)
             }
         case actionTypes.DELETE_EXPENSE:
-            // return state.filter((expense) => expense._id !== action.payload._id)
             return {
                 ...state,
                 expenses: state.expenses.filter((expense) => expense._id !== action.payload._id),
                 totalExpenses: state.totalExpenses - action.payload.amount
+            }
+        case actionTypes.UPDATE_EXPENSE:
+            return {
+                ...state,
+                expenses: state.expenses.map((expense) => expense._id === action.payload.body._id ? action.payload.body : expense),
+                totalExpenses: state.totalExpenses - action.payload.oldExpense + action.payload.body.amount
             }
         case actionTypes.LOGIN_START:
             return {
@@ -40,7 +44,7 @@ export const expensesReducer = (state = initialState, action) => {
             }
         case actionTypes.LOGIN_SUCCESS:
             return {
-                ...state, 
+                ...state,
                 user: action.payload.user,
                 accesstoken: action.payload.token,
                 isFetching: false,
@@ -58,7 +62,7 @@ export const expensesReducer = (state = initialState, action) => {
         case actionTypes.UPDATE_BUDGET:
             return {
                 ...state,
-                user: {...state.user, budget: action.payload}
+                user: { ...state.user, budget: action.payload }
             }
         default:
             return state;

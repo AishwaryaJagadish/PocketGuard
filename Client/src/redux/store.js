@@ -1,7 +1,6 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {  configureStore } from '@reduxjs/toolkit';
 import { expensesReducer } from './reducer/expensesReducer';
-import  userReducer from './userSlice';
-import thunk from "redux-thunk";
+
 import {
   persistStore,
   persistReducer,
@@ -13,7 +12,7 @@ import {
   REGISTER,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import { PersistGate } from 'redux-persist/integration/react'
+
 
 const persistConfig = {
   key: 'root',

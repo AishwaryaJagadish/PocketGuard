@@ -36,11 +36,11 @@ function Budget() {
         <>
             <Navbar />
             <div className="mx-auto max-w-7xl px-2 py-8 sm:px-6 lg:px-8">
-                <div className=" flex items-center justify-between grid-cols-2">
+                <div className="items-center justify-between md:flex  md:grid-cols-2 ">
                     <div className="w-1/3 flex flex-col justify-between bg-white rounded-lg border border-gray-400 mb-6 py-5 px-4">
-                        <div className="flex justify-between items-center">
+                        <div className="md:flex justify-between items-center">
                             <h2 className="text-2xl font-semibold mb-2">Budget</h2>
-                            <button className="bg-500 bg-blue-600 hover:bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-medium" onClick={() => { setOpen(true) }}>
+                            <button className=" bg-500 bg-blue-600 hover:bg-blue-500 text-white rounded-md px-3 py-2 text-xs md:text-sm font-medium " onClick={() => { setOpen(true) }}>
                                 Update Budget
                             </button>
                         </div>
