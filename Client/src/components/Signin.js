@@ -97,7 +97,7 @@ function Signin() {
                                 onClick={handleClick}
                                 disabled={isFetching}
                             >
-                                Sign in
+                               {!islogin ? "Create an account" : "Sign in"}
                             </button>
                         </div>
                     </form>

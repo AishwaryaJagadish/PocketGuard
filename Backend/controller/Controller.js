@@ -43,10 +43,13 @@ exports.getExpenses = async(req,res) => {
 exports.updateExpense = async(req,res) => {
     try{
         const expense = await Expense.findById(req.params.id);
+        const oldExpense = expense.amount;
         expense.name = req.body.name;
         expense.amount = req.body.amount;
         await expense.save();
         res.status(200).json({
+            body: expense,
+            oldExpense: oldExpense,
             message: 'Expense updated successfully!'
         });
     }
