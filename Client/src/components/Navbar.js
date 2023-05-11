@@ -32,6 +32,7 @@ export default function Navbar() {
   const navigation = [
     { name: 'Home', href: '#', current: true, onClick: () => { console.log("Home") } },
     { name: 'Add Expense', href: '#', current: false, onClick: () => { setOpen(true) } },
+    { name: 'Predictions', href: '/predictions', current: false },
   ]
 
   return (
